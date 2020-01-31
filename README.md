@@ -6,15 +6,15 @@ A PHP library to check the current environment against a set of defined requirem
 ### Install via composer
 
 ```shell
-composer require mirazmac/php-requirements-checker
+composer require mirazmac/php-requirements-checker dev-master
 ```
 
 ### Manual Install
 
-Download the latest release. Extract and require **src/Requirements.php** in your code. But it's highly recommended to use [Composer](http://getcomposer.org).
+Download the latest release. Extract and require **src/Checker.php** in your code. But it's highly recommended to use [Composer](http://getcomposer.org).
 
 ```php
-require 'src/Requirements.php';
+require 'src/Checker.php';
 ```
 
 
@@ -156,3 +156,7 @@ $checker->requireFile('app/config.ini', Checker::CHECK_IS_FILE)
         ->requireFile('app/cache', Checker::CHECK_IS_WRITABLE);
         ->requireDirectory('app/cache', Checker::CHECK_IS_DIR);
 ```
+
+## Todos
+* Write tests
+* Write extended docs
