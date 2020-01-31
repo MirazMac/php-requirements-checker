@@ -1,4 +1,6 @@
 # PHP Requirements Checker
+![PHP Requirements Checker](https://i.postimg.cc/PxhHbVsY/pcr.png)
+
 A PHP library to check the current environment against a set of defined requirements. Currently it supports checking for PHP version, OS, extensions, php.ini values, functions, classes, apache modules and local files and folders.
 
 ### Install via composer
