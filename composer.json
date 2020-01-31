@@ -1,0 +1,20 @@
+{
+    "name": "mirazmac/php-requirements-checker",
+    "description": "A quick library to check the current environment against a set of defined requirements. It supports checking for PHP version, OS, Extensions, PHP INI values, Functions, Classes, Apache Modules and local Files and Folders.",
+    "type": "library",
+    "require": {
+        "php": ">=5.4"
+    },
+    "license": "The MIT License",
+    "authors": [
+        {
+            "name": "MirazMac",
+            "email": "mirazmac@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "MirazMac\\Requirements\\": "src/"
+        }
+    }
+}
