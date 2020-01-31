@@ -59,7 +59,7 @@ if ($satisfied) {
 Every supported requirements check begins with the word **require**. They return the class instance that means they're chain-able. These are the supported checks:
 
 ### requirePhpVersion(string $version);
-You can check if current PHP version matches your desired version using this method. The parameter ``$version`` should be a string containing your desired PHP version. Comparison operators can be perpended at the very beginning of the string.
+You can check if current PHP version matches your desired version using this method. The parameter ``$version`` should be a string containing your desired PHP version. Comparison operators can be prepended at the very beginning of the string.
 
 ```php
 $checker->requirePhpVersion('7.0.0');
@@ -79,7 +79,7 @@ $checker->requireOS(Checker::OS_UNIX);
 
 
 ### requireIniValues(array $values)
-Use this to validate a set of php.ini config values to compare against your provided values. The parameter ``$values`` should be an array as key => value fashion, where the key would contain the php.ini config var and the value should be the desired value. Like ``requirePhpVersion();`` comparison operators can be perpended at the very beginning of the value.
+Use this to validate a set of php.ini config values to compare against your provided values. The parameter ``$values`` should be an array as key => value fashion, where the key would contain the php.ini config var and the value should be the desired value. Like ``requirePhpVersion();`` comparison operators can be prepended at the very beginning of the value.
 To keep things simple and neat, use ``boolean`` instead of using ``On/1/Off/0`` for the check.
 
 ```php
