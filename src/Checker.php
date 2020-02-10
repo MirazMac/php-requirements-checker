@@ -471,7 +471,7 @@ class Checker
                             $data['message'] = "The path `{$file}` must be {$humanFriendly}";
 
                             if (!$exists) {
-                                $data['message'] .= "But the path doesn't even exist";
+                                $data['message'] .= ", but the path doesn't even exist";
                             }
                             break;
                     }
