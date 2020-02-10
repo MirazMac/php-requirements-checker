@@ -416,9 +416,9 @@ class Checker
         $values = [];
 
         foreach ($this->requirements['files'] as $file => $checks) {
-            $data = $this->getParsedStructure();
+            $structure = $this->getParsedStructure();
             $file = $this->unixPath($file);
-            $data['path'] = $file;
+            $structure['path'] = $file;
 
             $type = 'path';
 
@@ -431,6 +431,7 @@ class Checker
             }
 
             foreach ($checks as $check) {
+                $data = $structure;
                 $data['preferred'] = $check;
                 $data['satisfied'] = (bool) $check($file);
                 $data['current']   = $data['satisfied'];
