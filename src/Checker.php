@@ -368,14 +368,15 @@ class Checker
             $structure['preferred'] = $this->requirements['system']['php_version'];
             $parsed = $this->parseComparisonString($this->requirements['system']['php_version'], '>=');
             $result = version_compare(\PHP_VERSION, $parsed['plain'], $parsed['operator']);
-            $structure['satisfied'] = true;
+
+            $structure['satisfied'] = $result;
 
             if (!$result) {
                 $this->satisfied = false;
                 $structure['message'] = sprintf(
                     'PHP version must be %1$s %2$s',
                     $this->locale[$parsed['operator']],
-                    $structure['current']
+                    $structure['preferred']
                 );
                 $this->errors[] = $structure['message'];
             }
