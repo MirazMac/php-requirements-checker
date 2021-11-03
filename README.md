@@ -6,7 +6,7 @@ A PHP library to check the current environment against a set of defined requirem
 ### Install via composer
 
 ```shell
-composer require mirazmac/php-requirements-checker dev-master
+composer require mirazmac/php-requirements-checker
 ```
 
 ### Manual Install

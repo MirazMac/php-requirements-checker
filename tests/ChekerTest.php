@@ -2,8 +2,6 @@
 
 namespace MirazMac\Requirements;
 
-use PHPUnit\Framework\TestCase;
-
 /**
  * Tests for the requirements checker
  *
