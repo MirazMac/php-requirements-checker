@@ -98,19 +98,7 @@ class Checker
      */
     public function __construct()
     {
-        $default = [
-            'system'    => ['php_version' => null, 'os' => null],
-            'ini_values'     => [],
-            'files'          => [],
-            'extensions'     => [],
-            'classes'        => [],
-            'functions'      => [],
-            'apache_modules' => [],
-        ];
-
-        $this->requirements = $default;
-
-        $this->parsedRequirements = $default;
+        $this->resetRequirements();
     }
 
     /**
@@ -129,6 +117,30 @@ class Checker
         $this->parsedRequirements['files'] = $this->validateFileRequirement();
 
         return $this->parsedRequirements;
+    }
+
+    /**
+     * Resets the requirements to default
+     *
+     * @return Checker
+     */
+    public function resetRequirements()
+    {
+        $default = [
+            'system'         => ['php_version' => null, 'os' => null],
+            'ini_values'     => [],
+            'files'          => [],
+            'extensions'     => [],
+            'classes'        => [],
+            'functions'      => [],
+            'apache_modules' => [],
+        ];
+
+        $this->requirements = $default;
+
+        $this->parsedRequirements = $default;
+
+        return $this;
     }
 
     /**
@@ -249,7 +261,17 @@ class Checker
             $data['preferred'] = $class;
             $data['current']   = false;
 
-            if (class_exists($this->ensureNamespace($class))) {
+
+            $satisfied = false;
+
+            foreach (explode('|', $class) as $className) {
+                if (class_exists($this->ensureNamespace($className))) {
+                    $satisfied = true;
+                    break;
+                }
+            }
+
+            if ($satisfied) {
                 $data['satisfied'] = true;
                 $data['current']   = true;
             } else {
@@ -264,6 +286,11 @@ class Checker
         return $values;
     }
 
+    /**
+     * Validates apache module requirements
+     *
+     * @return     array
+     */
     public function validateApacheModuleRequirement()
     {
         $values = [];
@@ -281,7 +308,16 @@ class Checker
             $structure['current'] = true;
             $structure['satisfied'] = true;
 
-            if (!in_array($module, $modules)) {
+            $satisfied = false;
+
+            foreach (explode('|', $module) as $moduleName) {
+                if (in_array($moduleName, $modules)) {
+                    $satisfied = true;
+                    break;
+                }
+            }
+
+            if (!$satisfied) {
                 $structure['satisfied'] = false;
                 $structure['current'] = false;
                 $this->satisfied = false;
@@ -309,7 +345,16 @@ class Checker
             $data['preferred'] = $func;
             $data['current']   = false;
 
-            if (function_exists($func)) {
+            $satisfied = false;
+
+            foreach (explode('|', $func) as $function) {
+                if (function_exists($function)) {
+                    $satisfied = true;
+                    break;
+                }
+            }
+
+            if ($satisfied) {
                 $data['satisfied'] = true;
                 $data['current']   = true;
             } else {
@@ -338,7 +383,16 @@ class Checker
             $data['preferred'] = $ext;
             $data['current']   = false;
 
-            if (extension_loaded($ext)) {
+            $satisfied = false;
+
+            foreach (explode('|', $ext) as $extension) {
+                if (extension_loaded($extension)) {
+                    $satisfied = true;
+                    break;
+                }
+            }
+
+            if ($satisfied) {
                 $data['satisfied'] = true;
                 $data['current']   = true;
             } else {
@@ -802,7 +856,7 @@ class Checker
         $operator = $default;
         $withoutVersion = $string;
 
-        if ($comparison2 == '>=' || $comparison2 == '<=' || $comparison2 == '==') {
+        if ($comparison2 == '>=' || $comparison2 == '<=') {
             $operator = $comparison2;
             $withoutVersion = substr($string, 2);
         } elseif ($comparison == '>' || $comparison == '<' || $comparison == '=') {
@@ -812,7 +866,7 @@ class Checker
 
         return [
             'operator' => $operator,
-            'plain' => $withoutVersion,
+            'plain'    => $withoutVersion,
         ];
     }
 
