@@ -15,7 +15,7 @@ $checker = new Checker;
 // Ensures allow_url_fopen is On
 
 $checker->requirePhpVersion('>=5.6')
-        ->requirePhpExtensions(['ffmpeg', 'mbstring'])
+        ->requirePhpExtensions(['pdo', 'mbstring'])
         ->requireFunctions(['random_bytes'])
         ->requireFile('../composer.json', Checker::CHECK_FILE_EXISTS)
         ->requireDirectory('../src', Checker::CHECK_IS_READABLE)
