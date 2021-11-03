@@ -108,13 +108,13 @@ class Checker
      */
     public function check()
     {
-        $this->parsedRequirements['system'] = $this->validateSystemRequirement();
-        $this->parsedRequirements['extensions'] = $this->validateExtensionRequirement();
+        $this->parsedRequirements['system']         = $this->validateSystemRequirement();
+        $this->parsedRequirements['extensions']     = $this->validateExtensionRequirement();
         $this->parsedRequirements['apache_modules'] = $this->validateApacheModuleRequirement();
-        $this->parsedRequirements['functions'] = $this->validateFunctionRequirement();
-        $this->parsedRequirements['classes'] = $this->validateClassRequirement();
-        $this->parsedRequirements['ini_values'] = $this->validateIniRequirement();
-        $this->parsedRequirements['files'] = $this->validateFileRequirement();
+        $this->parsedRequirements['functions']      = $this->validateFunctionRequirement();
+        $this->parsedRequirements['classes']        = $this->validateClassRequirement();
+        $this->parsedRequirements['ini_values']     = $this->validateIniRequirement();
+        $this->parsedRequirements['files']          = $this->validateFileRequirement();
 
         return $this->parsedRequirements;
     }
@@ -136,8 +136,7 @@ class Checker
             'apache_modules' => [],
         ];
 
-        $this->requirements = $default;
-
+        $this->requirements       = $default;
         $this->parsedRequirements = $default;
 
         return $this;
@@ -277,7 +276,7 @@ class Checker
             } else {
                 $this->satisfied = false;
                 $data['message'] = "Class `{$class}` is not defined";
-                $this->errors[] = $data['message'];
+                $this->errors[]  = $data['message'];
             }
 
             $values[$class] = $data;
@@ -303,9 +302,9 @@ class Checker
         $modules = apache_get_modules();
 
         foreach ($this->requirements['apache_modules'] as $key => $module) {
-            $structure = $this->getParsedStructure();
+            $structure              = $this->getParsedStructure();
             $structure['preferred'] = $module;
-            $structure['current'] = true;
+            $structure['current']   = true;
             $structure['satisfied'] = true;
 
             $satisfied = false;
@@ -319,10 +318,10 @@ class Checker
 
             if (!$satisfied) {
                 $structure['satisfied'] = false;
-                $structure['current'] = false;
-                $this->satisfied = false;
-                $structure['message'] = "Apache module `{$module}` is not loaded";
-                $this->errors[] = $structure['message'];
+                $structure['current']   = false;
+                $this->satisfied        = false;
+                $structure['message']   = "Apache module `{$module}` is not loaded";
+                $this->errors[]         = $structure['message'];
             }
 
             $values[$module] = $structure;
@@ -360,7 +359,7 @@ class Checker
             } else {
                 $this->satisfied = false;
                 $data['message'] = "PHP function `{$func}()` is not defined";
-                $this->errors[] = $data['message'];
+                $this->errors[]  = $data['message'];
             }
 
             $values[$func] = $data;
@@ -398,7 +397,7 @@ class Checker
             } else {
                 $this->satisfied = false;
                 $data['message'] = "PHP extension {$ext} is not loaded";
-                $this->errors[] = $data['message'];
+                $this->errors[]  = $data['message'];
             }
 
             $values[$ext] = $data;
@@ -417,12 +416,11 @@ class Checker
         $values = [];
 
         if ($this->requirements['system']['php_version']) {
-            $structure = $this->getParsedStructure();
-            $structure['current'] = \PHP_VERSION;
+            $structure              = $this->getParsedStructure();
+            $structure['current']   = \PHP_VERSION;
             $structure['preferred'] = $this->requirements['system']['php_version'];
-            $parsed = $this->parseComparisonString($this->requirements['system']['php_version'], '>=');
-            $result = version_compare(\PHP_VERSION, $parsed['plain'], $parsed['operator']);
-
+            $parsed                 = $this->parseComparisonString($this->requirements['system']['php_version'], '>=');
+            $result                 = version_compare(\PHP_VERSION, $parsed['plain'], $parsed['operator']);
             $structure['satisfied'] = $result;
 
             if (!$result) {
@@ -471,13 +469,11 @@ class Checker
         $values = [];
 
         foreach ($this->requirements['files'] as $file => $checks) {
-            $structure = $this->getParsedStructure();
-            $file = $this->unixPath($file);
+            $structure         = $this->getParsedStructure();
+            $file              = $this->unixPath($file);
             $structure['path'] = $file;
-
-            $type = 'path';
-
-            $exists = file_exists($file);
+            $type              = 'path';
+            $exists            = file_exists($file);
 
             if (is_file($file)) {
                 $type = 'file';
@@ -486,7 +482,7 @@ class Checker
             }
 
             foreach ($checks as $check) {
-                $data = $structure;
+                $data              = $structure;
                 $data['preferred'] = $check;
                 $data['satisfied'] = (bool) $check($file);
                 $data['current']   = $data['satisfied'];
@@ -521,7 +517,7 @@ class Checker
                             break;
                         case static::CHECK_IS_READABLE:
                         case static::CHECK_IS_WRITABLE:
-                            $humanFriendly = str_replace('is_', '', $check);
+                            $humanFriendly   = str_replace('is_', '', $check);
                             $data['current'] = "Not {$humanFriendly}";
                             $data['message'] = "The path `{$file}` must be {$humanFriendly}";
 
