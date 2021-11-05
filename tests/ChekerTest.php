@@ -99,6 +99,18 @@ class CheckerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(false, $this->checker->isSatisfied());
     }
 
+    public function testUnlimitedIniValuePass()
+    {
+        ini_set('memory_limit', -1);
+
+        $this->checker->resetRequirements();
+        $this->checker->requireIniValues([
+            'memory_limit' => '>=64M',
+        ]);
+
+        $this->assertEquals(true, $this->checker->isSatisfied());
+    }
+
 
     /**
      * @dataProvider phpVersionPassData

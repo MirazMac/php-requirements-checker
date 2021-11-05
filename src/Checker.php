@@ -230,9 +230,9 @@ class Checker
             $newcfg = $this->returnBytes($setting);
             $newval = $this->returnBytes($value);
 
-
-            $data['satisfied'] = $this->looseComparison($newcfg, $operator, $newval);
-
+            // Acknowledge '-1'(unlimited) values
+            // @see https://github.com/MirazMac/php-requirements-checker/issues/2
+            $data['satisfied'] = ($setting == '-1') ? true : $this->looseComparison($newcfg, $operator, $newval);
 
             if (!$data['satisfied']) {
                 $this->satisfied = false;
