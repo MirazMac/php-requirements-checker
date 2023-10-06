@@ -108,6 +108,9 @@ class Checker
      */
     public function check()
     {
+        // Reset any previous run
+        $this->errors = [];
+        
         $this->parsedRequirements['system']         = $this->validateSystemRequirement();
         $this->parsedRequirements['extensions']     = $this->validateExtensionRequirement();
         $this->parsedRequirements['apache_modules'] = $this->validateApacheModuleRequirement();
