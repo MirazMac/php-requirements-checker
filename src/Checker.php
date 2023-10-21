@@ -108,6 +108,9 @@ class Checker
      */
     public function check()
     {
+        // Reset any previous run
+        $this->errors = [];
+        
         $this->parsedRequirements['system']         = $this->validateSystemRequirement();
         $this->parsedRequirements['extensions']     = $this->validateExtensionRequirement();
         $this->parsedRequirements['apache_modules'] = $this->validateApacheModuleRequirement();
@@ -418,16 +421,24 @@ class Checker
         if ($this->requirements['system']['php_version']) {
             $structure              = $this->getParsedStructure();
             $structure['current']   = \PHP_VERSION;
-            $structure['preferred'] = $this->requirements['system']['php_version'];
-            $parsed                 = $this->parseComparisonString($this->requirements['system']['php_version'], '>=');
-            $result                 = version_compare(\PHP_VERSION, $parsed['plain'], $parsed['operator']);
-            $structure['satisfied'] = $result;
+            $structure['preferred'] = implode(' & ', $this->requirements['system']['php_version']);
+
+            // Check all parts
+            $result = true;
+            $count = 0;
+            foreach ($this->requirements['system']['php_version'] as $php_requirement)
+            {
+                $count++;
+                $parsed = $this->parseComparisonString($php_requirement, '>=');
+                $result = ($result AND version_compare(\PHP_VERSION, $parsed['plain'], $parsed['operator']));
+            }
+
+            $this->satisfied = $result;
 
             if (!$result) {
-                $this->satisfied = false;
                 $structure['message'] = sprintf(
-                    'PHP version must be %1$s %2$s',
-                    $this->locale[$parsed['operator']],
+                    'PHP version must %1$s %2$s',
+                    $count == 1 ? 'be '.$this->locale[$parsed['operator']] : 'match',
                     $structure['preferred']
                 );
                 $this->errors[] = $structure['message'];
@@ -567,7 +578,7 @@ class Checker
     /**
      * Set required PHP version
      *
-     * @param  string $version The required PHP version
+     * @param  string|array $version The required PHP version(s). Use array to specify a range, e.g. ['>=7.2', '<7.3']
      * @return Checker
      */
     public function requirePhpVersion($version)
