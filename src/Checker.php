@@ -20,37 +20,37 @@ class Checker
     /**
      * Identifier for is_file() check
      */
-    public const CHECK_IS_FILE = 'is_file';
+    const CHECK_IS_FILE = 'is_file';
 
     /**
      * Identifier for is_dir() check
      */
-    public const CHECK_IS_DIR = 'is_dir';
+    const CHECK_IS_DIR = 'is_dir';
 
     /**
      * Identifier for is_readable() check
      */
-    public const CHECK_IS_READABLE = 'is_readable';
+    const CHECK_IS_READABLE = 'is_readable';
 
     /**
      * Identifier for is_writable() check
      */
-    public const CHECK_IS_WRITABLE = 'is_writable';
+    const CHECK_IS_WRITABLE = 'is_writable';
 
     /**
      * Identifier for file_exists() check
      */
-    public const CHECK_FILE_EXISTS = 'file_exists';
+    const CHECK_FILE_EXISTS = 'file_exists';
 
     /**
      * Identifier for Unix
      */
-    public const OS_UNIX = 'UNIX';
+    const OS_UNIX = 'UNIX';
 
     /**
      * Identifier for Windows
      */
-    public const OS_DOS = 'DOS';
+    const OS_DOS = 'DOS';
 
     /**
      * Requirements as an array
@@ -418,7 +418,7 @@ class Checker
     {
         $values = [];
 
-        if ($this->requirements['system']['php_version']) {
+        if (!empty($this->requirements['system']['php_version'])) {
             $structure              = $this->getParsedStructure();
             $structure['current']   = \PHP_VERSION;
             $structure['preferred'] = implode(' & ', $this->requirements['system']['php_version']);
@@ -426,13 +426,15 @@ class Checker
             // Check all parts
             $result = true;
             $count = 0;
-            foreach ($this->requirements['system']['php_version'] as $php_requirement) {
+            foreach ($this->requirements['system']['php_version'] as $php_requirement)
+            {
                 $count++;
                 $parsed = $this->parseComparisonString($php_requirement, '>=');
-                $result = ($result and version_compare(\PHP_VERSION, $parsed['plain'], $parsed['operator']));
+                $result = ($result AND version_compare(\PHP_VERSION, $parsed['plain'], $parsed['operator']));
             }
 
             $this->satisfied = $result;
+            $structure['satisfied'] = $result;
 
             if (!$result) {
                 $structure['message'] = sprintf(
@@ -441,7 +443,11 @@ class Checker
                     $structure['preferred']
                 );
                 $this->errors[] = $structure['message'];
+                $structure['satisfied'] = false;
             }
+
+
+
 
             $values['php_version'] = $structure;
         }
@@ -923,11 +929,11 @@ class Checker
             case 'g':
             case 'gb':
                 $val *= 1024;
-                // no break
+            // no break
             case 'm':
             case 'mb':
                 $val *= 1024;
-                // no break
+            // no break
             case 'k':
             case 'kb':
                 $val *= 1024;
