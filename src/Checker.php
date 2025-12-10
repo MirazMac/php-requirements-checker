@@ -20,37 +20,37 @@ class Checker
     /**
      * Identifier for is_file() check
      */
-    const CHECK_IS_FILE = 'is_file';
+    public const CHECK_IS_FILE = 'is_file';
 
     /**
      * Identifier for is_dir() check
      */
-    const CHECK_IS_DIR = 'is_dir';
+    public const CHECK_IS_DIR = 'is_dir';
 
     /**
      * Identifier for is_readable() check
      */
-    const CHECK_IS_READABLE = 'is_readable';
+    public const CHECK_IS_READABLE = 'is_readable';
 
     /**
      * Identifier for is_writable() check
      */
-    const CHECK_IS_WRITABLE = 'is_writable';
+    public const CHECK_IS_WRITABLE = 'is_writable';
 
     /**
      * Identifier for file_exists() check
      */
-    const CHECK_FILE_EXISTS = 'file_exists';
+    public const CHECK_FILE_EXISTS = 'file_exists';
 
     /**
      * Identifier for Unix
      */
-    const OS_UNIX = 'UNIX';
+    public const OS_UNIX = 'UNIX';
 
     /**
      * Identifier for Windows
      */
-    const OS_DOS = 'DOS';
+    public const OS_DOS = 'DOS';
 
     /**
      * Requirements as an array
@@ -110,7 +110,7 @@ class Checker
     {
         // Reset any previous run
         $this->errors = [];
-        
+
         $this->parsedRequirements['system']         = $this->validateSystemRequirement();
         $this->parsedRequirements['extensions']     = $this->validateExtensionRequirement();
         $this->parsedRequirements['apache_modules'] = $this->validateApacheModuleRequirement();
@@ -426,11 +426,10 @@ class Checker
             // Check all parts
             $result = true;
             $count = 0;
-            foreach ($this->requirements['system']['php_version'] as $php_requirement)
-            {
+            foreach ($this->requirements['system']['php_version'] as $php_requirement) {
                 $count++;
                 $parsed = $this->parseComparisonString($php_requirement, '>=');
-                $result = ($result AND version_compare(\PHP_VERSION, $parsed['plain'], $parsed['operator']));
+                $result = ($result and version_compare(\PHP_VERSION, $parsed['plain'], $parsed['operator']));
             }
 
             $this->satisfied = $result;
@@ -583,7 +582,7 @@ class Checker
      */
     public function requirePhpVersion($version)
     {
-        $this->requirements['system']['php_version'] = $version;
+        $this->requirements['system']['php_version'] = (array) $version;
         return $this;
     }
 
@@ -801,7 +800,7 @@ class Checker
      */
     public function removePhpVersionRequirement()
     {
-        $this->requirements['system']['php_version'] = null;
+        $this->requirements['system']['php_version'] = [];
 
         return $this;
     }
@@ -924,11 +923,11 @@ class Checker
             case 'g':
             case 'gb':
                 $val *= 1024;
-            // no break
+                // no break
             case 'm':
             case 'mb':
                 $val *= 1024;
-            // no break
+                // no break
             case 'k':
             case 'kb':
                 $val *= 1024;
